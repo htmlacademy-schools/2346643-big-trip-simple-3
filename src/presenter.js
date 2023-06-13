@@ -9,11 +9,13 @@ import FiltersView from './view/filters-view';
 export default class BoardPresenter {
   pointListComponent = new PointListView();
 
-  constructor({boardContainer}) {
+  constructor({boardContainer, pointModel}) {
     this.boardContainer = boardContainer;
+    this.pointModel = pointModel;
   }
 
   init() {
+    this.points = [...this.pointModel.getPoints()];
     const filterElement = document.querySelector('.trip-controls__filters');
     render(new FiltersView(), filterElement);
     render(new CreationFormView(), this.pointListComponent.getElement());
@@ -21,8 +23,8 @@ export default class BoardPresenter {
     render(this.pointListComponent, this.boardContainer);
     render(new EditFormView(), this.pointListComponent.getElement());
 
-    for (let i = 0; i < 3; i++) {
-      render(new PointView(), this.pointListComponent.getElement());
+    for (let i = 0; i < this.points.length; i++) {
+      render(new PointView(this.points[i]), this.pointListComponent.getElement());
     }
   }
 }
